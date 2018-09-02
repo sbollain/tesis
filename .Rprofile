@@ -21,6 +21,3 @@
 #  if (interactive()) 
 #    fortunes::fortune()
 
-misPaquetes <- c("Rcmdr","ggplot2")
-# Añadimos el paquete Zoo para gestión de series temporales
-misPaquetes <- c(misPaquetes,"zoo")
