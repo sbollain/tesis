@@ -1,0 +1,72 @@
+---
+title: "Notebook para descarga de los datos desde nuestra BBDD de PostgreSQL"
+output:
+  html_document:
+    df_print: paged
+---
+Primero tenemos que realizar la conexión a la BBDD PostgreSQSL 
+```{r}
+psswd <- .rs.askForPassword("Introduzca la contraseña de la BBDD")
+```
+
+```{r}
+library("RPostgreSQL")
+drv <- dbDriver("PostgreSQL")
+con <- dbConnect(drv,dbname="prueba",host="localhost",port=5432,user="medlinetec",password=psswd)
+```
+
+
+EN CADA CASO PARTICULAR HABRÍA QUE PERSONALIZAR \
+La tabla de la que vamos a leer \
+El paciente \
+Y el intervalo de fechas que nos interesa \
+
+```{r}
+tabla <- 'lectura_p2015_02'
+paciente_id <-358
+fecha_inicio <- "'2015-02-03'"
+fecha_fin <- "'2015-02-04'"
+
+consulta <- paste0('select fecha,parametro_id,valor from ', tabla, ' where paciente_id=',paciente_id,' and fecha >= ',fecha_inicio, ' and fecha <= ', fecha_fin)
+```
+
+
+```{r}
+res <- dbSendQuery(con,consulta)
+mydata <- fetch(res, n=-1)
+```
+
+```{r}
+dim(mydata)
+```
+
+
+```{r}
+str(mydata)
+```
+
+La variable "etiquetas" definida en el .Rprofile para que sea accesible desde todos los sitios
+
+```{r}
+mydata$parametro_id <- factor(mydata$parametro_id, levels=c(1:86),etiquetas)
+```
+
+
+```{r}
+summary (mydata$parametro_id)
+```
+
+
+Y finalmente, procedemos a la desconexión de la BBDD PostgreSQL
+```{r}
+dbHasCompleted(res)
+dbClearResult(res)
+dbDisconnect(con)
+dbUnloadDriver(drv)
+rm(consulta)
+rm(res)
+rm(con)
+rm(drv)
+rm(psswd)
+```
+

@@ -1,0 +1,258 @@
+---
+title: "CreacionDeEstructuras"
+output:
+  html_document:
+    df_print: paged
+---
+
+Vamos a crear series temporales para cada parámetro y finalmente un dataframe con la estructura adecuada, una línea por cada observación
+
+La librería que nos permite trabajar con series temporales con intervalos variables entre valores son "zoo" y"xts"
+```{r}
+library("xts")
+```
+
+Empezamos creando una time series por cada parámetro de los que haya medidas
+Como sugerencia, usar el comando summary
+para ver la lista de parámetros entre los 76 disponibles de los que hay datos:
+```{r}
+summary (mydata$parametro_id)
+```
+
+
+Identificamos para que parámetros hay valores y 
+creamos todas las series temporales en un bucle
+```{r}
+# Creamos un data frame "valores" que indicará el numero de valores disponibles
+cantidad <- 0
+valores <- data.frame(etiquetas, cantidad)
+
+for (i in 1:nrow (valores)){
+        cantidad <- nrow (mydata[mydata$parametro_id==etiquetas[i],])
+        valores [i,2] <- cantidad
+        if ( cantidad > 0) {
+                serie_d <- mydata[mydata$parametro_id==etiquetas[i],]
+                serie_d <- data.frame(serie_d$fecha,serie_d$valor)
+                colnames(serie_d) <- c("fecha","valor")
+                
+                print(paste("Hay ", cantidad ," valores de ", (etiquetas[i])))
+                print(paste("Entre ", serie_d$fecha[1], " y ", serie_d$fecha[cantidad] ))
+                
+                z.index <- round(serie_d$fecha,"secs")
+                z.data <- serie_d$valor
+                
+                if ( etiquetas[i]=="FR_PULSO") {
+                        FR_PULSO <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="FCECG") {
+                        FCECG <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="FCTA") {
+                        FCTA <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="SAT_O2") {
+                        SAT_O2 <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="TAS") {
+                        TAS <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="TAM") {
+                        TAM <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="TAD") {
+                        TAD <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="PVC") {
+                        PVC <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="PIC") {
+                        PIC <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="FR_RESPIRAT") {
+                        FR_RESPIRAT <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="FR_P") {
+                        FR_P <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="FR_E") {
+                        FR_E <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="ET_CO2") {
+                        ET_CO2 <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="PTC_CO2") {
+                        PTC_CO2 <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="INS_CO2") {
+                        INS_CO2 <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="PG_CO2") {
+                        PG_CO2 <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="TEMP1") {
+                        TEMP1 <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="TEMP2") {
+                        TEMP2 <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="I_PERFUSION") {
+                        I_PERFUSION <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="PIP_P") {
+                        PIP_P <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="PIP") {
+                        PIP <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="PEEP_P") {
+                        PEEP_P <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="PEEP") {
+                        PEEP <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="PMVR") {
+                        PMVR <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="VTI") {
+                        VTI <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="VTE") {
+                        VTE <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="FI_O2_P") {
+                        FI_O2_P <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="FI_O2") {
+                        FI_O2 <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="PS_P") {
+                        PS_P <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="PS_VOL") {
+                        PS_VOL <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="TI") {
+                        TI <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="V_MIN") {
+                        V_MIN <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="I") {
+                        I <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="E") {
+                        E <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="COMPLIANZA") {
+                        COMPLIANZA <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="RESISTENCIA") {
+                        RESISTENCIA <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="TRIGGER_F") {
+                        TRIGGER_F <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="RAMPA") {
+                        RAMPA <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="PHI") {
+                        PHI <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="PHIS_TC") {
+                        PHIS_TC <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="PHIS") {
+                        PHIS <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="I_CO2_GAP") {
+                        I_CO2_GAP <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="I_CO2_GAP_TC") {
+                        I_CO2_GAP_TC <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="VD_VT") {
+                        VD_VT <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="VD_VT_TC") {
+                        VD_VT_TC <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="PHS_A_ET") {
+                        PHS_A_ET <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="PHS_TC_ET") {
+                        PHS_TC_ET <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="PA_CO2") {
+                        PA_CO2 <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="PHA") {
+                        PHA <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="LACTATO") {
+                        LACTATO <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="MODO") {
+                        MODO <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="P_MESETA") {
+                        P_MESETA <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="FLUJO_PICO") {
+                        FLUJO_PICO <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="BIS") {
+                        BIS <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="ET_CO2_MGAS") {
+                        ET_CO2_MGAS <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="I_VENTIL") {
+                        I_VENTIL <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="PH") {
+                        PH <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="P_CO2") {
+                        P_CO2 <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="P_O2") {
+                        P_O2 <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="HCO3") {
+                        HCO3 <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="EAB") {
+                        EAB <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="X1") {
+                        X1 <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="X2") {
+                        X2 <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="PPC") {
+                        PPC <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="X3") {
+                        X3 <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="X4") {
+                        X4 <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="X5") {
+                        X5 <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="X6") {
+                        X6 <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="GRAD_TEMP") {
+                        GRAD_TEMP <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="X7") {
+                        X7 <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="PO2_POR_FIO2") {
+                        PO2_POR_FIO2 <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="PESO") {
+                        PESO <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="IO") {
+                        IO <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="O_SAT_O2") {
+                        O_SAT_O2 <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="O_CO2") {
+                        O_CO2 <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="O_ECG1") {
+                        O_ECG1 <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="O_RESP") {
+                        O_RESP <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="FR_CO2") {
+                        FR_CO2 <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="FR_VM") {
+                        FR_VM <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="FR_ECG") {
+                        FR_ECG <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="I_VENTIL_TC") {
+                        I_VENTIL_TC <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="VTE_POR_KG") {
+                        VTE_POR_KG <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="GLUCOSA") {
+                        GLUCOSA <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="ET_CO2_MEDIA") {
+                        ET_CO2_MEDIA <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="CO2_GAPR") {
+                        CO2_GAPR <- zoo(z.data,z.index)
+                } else if ( etiquetas[i]=="CO2_GAPR_TC") {
+                        CO2_GAPR_TC <- zoo(z.data,z.index)
+                } else {
+                        print("Algo ha ocurrido que no esperábamos")
+                }
+                rm (z.index)
+                rm (z.data)
+                rm (serie_d)
+                rm (i)
+                rm(cantidad)
+        }
+}
+
+```
+
+
+Finalmente, creamos los ficheros finales para el análisis
+PENDIENTE COMPROBAR PRIMERO SI HAY DATOS
+HAY QUE NORMALIZAR ADEMÁS LOS TIME STAMPS PARA EVITAR LLENAR EL DATAFRAME DE NAs
+```{r}
+Datos_ts <- merge.zoo (FR_PULSO,FCECG,SAT_O2,TAS,TAM,TAD,FR_RESPIRAT,FR_P,FR_E,ET_CO2,PTC_CO2,INS_CO2,PIP,PMVR,VTE,PS_VOL,COMPLIANZA,RESISTENCIA) 
+```
+
+Si queremos los datos sin NA:
+```{r}
+Datos_ts_interpolados <- na.approx(Datos_ts)
+Datos_ts_interpolados <- na.omit(Datos_ts_interpolados)
+```
+
+Funcion para convertir una clase zoo en un dataframe
+```{r}
+zooToDf <- function(z) {
+    df <- as.data.frame(z) 
+    df$Date <- time(z) #create a Date column
+    rownames(df) <- NULL #so row names not filled with dates
+    df <- df[,c(ncol(df), 1:(ncol(df)-1))] #reorder columns so Date first
+    return(df)
+}
+```
+
+Y aquí tenemos nuestro dataframe
+```{r}
+Datos <- zooToDf(Datos_ts)
+```
+
