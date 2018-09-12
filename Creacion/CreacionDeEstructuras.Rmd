@@ -21,32 +21,27 @@ summary (mydata$parametro_id)
 Identificamos para que parámetros hay valores y 
 creamos todas las series temporales en un bucle
 ```{r}
+#Creamos un dataframe para guardar si hay valores de cada parámetro y cuantos hay
+valores <- data.frame(etiquetas,0,FALSE)
+colnames(valores) <- c("Parámetros","Cantidad","Existen") 
 
 for (i in 1:nrow (valores)){
-        serie_d <- mydata[mydata$parametro_id==etiquetas[i],]
-        cantidad <- nrow (mydata[mydata$parametro_id==etiquetas[i],])
-        if ( cantidad > 0) {
+        valores$Cantidad[i] <- nrow (mydata[mydata$parametro_id==etiquetas[i],])
+        if ( valores$Cantidad[i] > 0) {
+                valores$Existen[i] <- TRUE
                 serie_d <- mydata[mydata$parametro_id==etiquetas[i],]
                 serie_d <- data.frame(serie_d$fecha,serie_d$valor)
                 colnames(serie_d) <- c("fecha","valor")
                 
-                print(paste("Hay", cantidad ,"valores de", (etiquetas[i]),"entre", serie_d$fecha[1], "y", serie_d$fecha[cantidad]))
+                print(paste("Hay", valores$Cantidad[i] ,"valores de", (etiquetas[i]),"entre", serie_d$fecha[1], "y", serie_d$fecha[valores$Cantidad[i]]))
                 
-                z.index <- round(serie_d$fecha,"secs")
-                z.data <- serie_d$valor
+                assign (etiquetas[i], xts(serie_d$valor,round(serie_d$fecha,"secs")))
                 
-                assign (etiquetas[i], zoo(z.data,z.index))
-                
-                rm (z.index)
-                rm (z.data)
                 rm (serie_d)
         }
-        rm(cantidad)
         rm (i)
 }
 ```
-
-
 
 
 
@@ -54,7 +49,7 @@ Finalmente, creamos los ficheros finales para el análisis
 PENDIENTE COMPROBAR PRIMERO SI HAY DATOS
 HAY QUE NORMALIZAR ADEMÁS LOS TIME STAMPS PARA EVITAR LLENAR EL DATAFRAME DE NAs
 ```{r}
-Datos_ts <- merge.zoo (FR_PULSO,FCECG,SAT_O2,TAS,TAM,TAD,FR_RESPIRAT,FR_P,FR_E,ET_CO2,PTC_CO2,INS_CO2,PIP,PMVR,VTE,PS_VOL,COMPLIANZA,RESISTENCIA) 
+Datos_ts <- merge.xts (FR_PULSO,FCECG,SAT_O2,TAS,TAM,TAD,FR_RESPIRAT,FR_P,FR_E,ET_CO2,PTC_CO2,INS_CO2,PIP,PMVR,VTE,PS_VOL,COMPLIANZA,RESISTENCIA) 
 ```
 
 Si queremos los datos sin NA:
