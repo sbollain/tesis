@@ -10,7 +10,7 @@
 
 # Al vector "misPaquetes" se deben añadir todos los paquetes requeridos
 # Paquetes básicos
-misPaquetes <- c("Rcmdr","ggplot2")
+misPaquetes <- c("Rcmdr","ggplot2","rlist")
 # Añadimos el paquete "RPostgreSQL" para la conexión a la BBDD
 misPaquetes <- c(misPaquetes,"RPostgreSQL")
 # Añadimos los paquetes "zoo" y "xts" para gestión de series temporales

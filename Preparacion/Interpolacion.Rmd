@@ -1,0 +1,39 @@
+---
+title: "Interpolacion"
+output: html_notebook
+---
+
+HAY QUE NORMALIZAR ADEMÁS LOS TIME STAMPS PARA EVITAR LLENAR EL DATAFRAME DE NAs
+
+```{r}
+Datos_ts <- merge.xts (serie[[1]],serie[[2]])
+for (i in 3:length(serie)){
+        Datos_ts <- merge.xts(Datos_ts,serie[[i]])
+}
+rm (i)
+```
+
+
+Si queremos los datos sin NA:
+```{r}
+Datos_ts_interpolados <- na.approx(Datos_ts)
+Datos_ts_interpolados <- na.omit(Datos_ts_interpolados)
+#Pendiente revisar si tiene sentido que todos los parámetros lleven 1 decimal
+Datos_ts_interpolados <- round(Datos_ts_interpolados, digits = 1)
+```
+
+Funcion para convertir una clase zoo en un dataframe
+```{r}
+zooToDf <- function(z) {
+    df <- as.data.frame(z) 
+    df$Date <- time(z) #create a Date column
+    rownames(df) <- NULL #so row names not filled with dates
+    df <- df[,c(ncol(df), 1:(ncol(df)-1))] #reorder columns so Date first
+    return(df)
+}
+```
+
+Y aquí tenemos nuestro dataframe
+```{r}
+Datos <- zooToDf(Datos_ts)
+```
