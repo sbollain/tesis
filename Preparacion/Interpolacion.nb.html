@@ -1699,7 +1699,154 @@ $(document).ready(function () {
 
 
 <!-- rnb-text-begin -->
-<p>HAY QUE NORMALIZAR ADEMÁS LOS TIME STAMPS PARA EVITAR LLENAR EL DATAFRAME DE NAs</p>
+<p>En este notebook realiza las siguientes funciones 1) Seleccionar el timestamp inicial común para todas las series 2) Seleccionar el lapso temporal entre valores común para todas las series 3) Interpolar los valores para que no haya NAs en las series</p>
+<ol style="list-style-type: decimal">
+<li>Seleccionar el timestamp inicial común para todas las series</li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI0VtcGV6YW1vcyBwb3IgdmVyIGVsIHRpbWVzdGFtcCBpbmljaWFsIHBhcmEgY2FkYSBzZXJpZVxubGFwcGx5KHNlcmllLGZpcnN0KVxuYGBgIn0= -->
+<pre class="r"><code>#Empezamos por ver el timestamp inicial para cada serie
+lapply(serie,first)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiW1sxXV1cbiAgICAgICAgICAgICAgICAgICAgRlJfUFVMU09cbjIwMTUtMDItMDMgMTc6NDU6MDQgICAgICAgNzBcblxuW1syXV1cbiAgICAgICAgICAgICAgICAgICAgRkNFQ0dcbjIwMTUtMDItMDMgMTc6NDQ6NTkgICAgNjhcblxuW1szXV1cbiAgICAgICAgICAgICAgICAgICAgU0FUX08yXG4yMDE1LTAyLTAzIDE3OjQ1OjA0ICAgICA5M1xuXG5bWzRdXVxuICAgICAgICAgICAgICAgICAgICBUQVNcbjIwMTUtMDItMDMgMTc6NDU6MDFcblxuW1s2XV1cbiAgICAgICAgICAgICAgICAgICAgVEFEXG4yMDE1LTAyLTAzIDE3OjQ1OjAwICA0OVxuXG5bWzddXVxuICAgICAgICAgICAgICAgICAgICBGUl9SRVNQSVJBVFxuMjAxNS0wMi0wMyAxNzo0NDo1OCAgICAgICAgICAzMVxuXG5bWzhdXVxuICAgICAgICAgICAgICAgICAgICBGUl9QXG4yMDE1LTAyLTAzIDE3OjQ0OjU3ICAgMzFcblxuW1s5XV1cbiAgICAgICAgICAgICAgICAgICAgRlJfRVxuMjAxNS0wMi0wMyAxNzo0NTowMyAgICAwXG5cbltbMTBdXVxuICAgICAgICAgICAgICAgICAgICBFVF9DTzJcbjIwMTUtMDItMDMgMTc6NDQ6NTggICAgIDUzXG5cbltbMTFdXVxuICAgICAgICAgICAgICAgICAgICBQVENfQ08yXG4yMDE1LTAyLTAzIDE3OjQ0OjU5ICAgICAgNzZcblxuW1sxMl1dXG4gICAgICAgICAgICAgICAgICAgIElOU19DTzJcbjIwMTUtMDItMDMgMTc6NDQ6NTggIDI1XG5cbltbMTRdXVxuICAgICAgICAgICAgICAgICAgICBQTVZSXG4yMDE1LTAyLTAzIDE3OjQ1OjAzICAgMTVcblxuW1sxNV1dXG4gICAgICAgICAgICAgICAgICAgIFZURVxuMjAxNS0wMi0wMyAxNzo0NTowMyAxMTVcblxuW1sxNl1dXG4gICAgICAgICAgICAgICAgICAgIFBTX1ZPTFxuMjAxNS0wMi0wMyAxNzo0NTowMyAgICAxMjJcblxuW1sxN11dXG4gICAgICAgICAgICAgICAgICAgIENPTVBMSUFOWkFcbjIwMTUtMDItMDMgMTc6NDU6MDMgICAgICAgIDcuNlxuXG5bWzE4XV1cbiAgICAgICAgICAgICAgICAgICAgUkVTSVNURU5DSUFcbjIwMTUtMDItMDMgMTc6NDU6MDMgICAgICAgICAgMTVcbiJ9 -->
+<pre><code>[[1]]
+                    FR_PULSO
+2015-02-03 17:45:04       70
+
+[[2]]
+                    FCECG
+2015-02-03 17:44:59    68
+
+[[3]]
+                    SAT_O2
+2015-02-03 17:45:04     93
+
+[[4]]
+                    TAS
+2015-02-03 17:45:01
+
+[[6]]
+                    TAD
+2015-02-03 17:45:00  49
+
+[[7]]
+                    FR_RESPIRAT
+2015-02-03 17:44:58          31
+
+[[8]]
+                    FR_P
+2015-02-03 17:44:57   31
+
+[[9]]
+                    FR_E
+2015-02-03 17:45:03    0
+
+[[10]]
+                    ET_CO2
+2015-02-03 17:44:58     53
+
+[[11]]
+                    PTC_CO2
+2015-02-03 17:44:59      76
+
+[[12]]
+                    INS_CO2
+2015-02-03 17:44:58  25
+
+[[14]]
+                    PMVR
+2015-02-03 17:45:03   15
+
+[[15]]
+                    VTE
+2015-02-03 17:45:03 115
+
+[[16]]
+                    PS_VOL
+2015-02-03 17:45:03    122
+
+[[17]]
+                    COMPLIANZA
+2015-02-03 17:45:03        7.6
+
+[[18]]
+                    RESISTENCIA
+2015-02-03 17:45:03          15</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI0FRVUkgREVCRVJJQU1PUyBBSE9SQSBERUNJRElSIENPTU8gQ0FMQ1VMQVIgRUwgVElNRVNUQU1QIElOSUNJQUxcbmBgYCJ9 -->
+<pre class="r"><code>#AQUI DEBERIAMOS AHORA DECIDIR COMO CALCULAR EL TIMESTAMP INICIAL</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<ol start="2" style="list-style-type: decimal">
+<li>Seleccionar el lapso temporal entre valores común para todas las series</li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI0NyZWFtb3MgdW5hIGZ1bmNpw7NuIHBhcmEgY2FsY3VsYXIgbGEgbW9kYVxuTW9kZSA8LSBmdW5jdGlvbih4KSB7XG4gIHV4IDwtIHVuaXF1ZSh4KVxuICB1eFt3aGljaC5tYXgodGFidWxhdGUobWF0Y2goeCwgdXgpKSldXG59XG4jQ29tcHJvYmFtb3MgYWhvcmEgYWwgbGFwc28gdGVtcG9yYWwgZW50cmUgdmFsb3JlcyBwYXJhIGNhZGEgc2VyaWUgeSBzdSBtb2RhXG5hYSA8LSBsYXBwbHkoc2VyaWUsLmluZGV4KSAjZXh0cmFlIGxvcyB0aW1lc3RhbXBzIGRlIGxhcyBzZXJpZXNcbmJiIDwtIGxhcHBseShhYSxkaWZmKSAjY2FsdWxhIGVsIGxhcHNvIHRlbXBvcmFsXG5jYyA8LSBsYXBwbHkoYmIsTW9kZSkgI2NhbGN1bGEgbGEgbW9kYSBkZSBjYWRhIHNlcmllXG54IDwtIDBcbmZvciAoaSBpbiAxOmxlbmd0aChjYykpe1xuICAgICAgICB4W2ldIDwtIGNjW1tpXV1cbiAgICAgICAgcHJpbnQgKHBhc3RlKFwiTGEgbW9kYSBkZVwiLCBuYW1lcyhzZXJpZVtbaV1dKSwgXCJlczpcIix4W2ldKSlcbn1cbmBgYCJ9 -->
+<pre class="r"><code>#Creamos una función para calcular la moda
+Mode &lt;- function(x) {
+  ux &lt;- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+#Comprobamos ahora al lapso temporal entre valores para cada serie y su moda
+aa &lt;- lapply(serie,.index) #extrae los timestamps de las series
+bb &lt;- lapply(aa,diff) #calula el lapso temporal
+cc &lt;- lapply(bb,Mode) #calcula la moda de cada serie
+x &lt;- 0
+for (i in 1:length(cc)){
+        x[i] &lt;- cc[[i]]
+        print (paste(&quot;La moda de&quot;, names(serie[[i]]), &quot;es:&quot;,x[i]))
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiTGEgbW9kYSBkZSBGUl9QVUxTTyBlczogNFwiXG5bMV0gXCJMYSBtb2RhIGRlIEZDRUNHIGVzOiA0XCJcblsxXSBcIkxhIG1vZGEgZGUgU0FUX08yIGVzOiA0XCJcblsxXSBcIkxhIG1vZGEgZGUgVEFTIGVzOiA0XCJcblsxXSBcIkxhIG1vZGEgZGUgVEFNIGVzOiA0XCJcblsxXSBcIkxhIG1vZGEgZGUgVEFEIGVzOiA0XCJcblsxXSBcIkxhIG1vZGEgZGUgRlJfUkVTUElSQVQgZXM6IDRcIlxuWzFdIFwiTGEgbW9kYSBkZSBGUl9QIGVzOiA0XCJcblsxXSBcIkxhIG1vZGEgZGUgRlJfRSBlczogNFwiXG5bMV0gXCJMYSBtb2RhIGRlIEVUX0NPMiBlczogNFwiXG5bMV0gXCJMYSBtb2RhIGRlIFBUQ19DTzIgZXM6IDdcIlxuWzFdIFwiTGEgbW9kYSBkZSBJTlNfQ08yIGVzOiA0XCJcblsxXSBcIkxhIG1vZGEgZGUgUElQIGVzOiA0XCJcblsxXSBcIkxhIG1vZGEgZGUgUE1WUiBlczogNFwiXG5bMV0gXCJMYSBtb2RhIGRlIFZURSBlczogNFwiXG5bMV0gXCJMYSBtb2RhIGRlIFBTX1ZPTCBlczogNFwiXG5bMV0gXCJMYSBtb2RhIGRlIENPTVBMSUFOWkEgZXM6IDRcIlxuWzFdIFwiTGEgbW9kYSBkZSBSRVNJU1RFTkNJQSBlczogNFwiXG4ifQ== -->
+<pre><code>[1] &quot;La moda de FR_PULSO es: 4&quot;
+[1] &quot;La moda de FCECG es: 4&quot;
+[1] &quot;La moda de SAT_O2 es: 4&quot;
+[1] &quot;La moda de TAS es: 4&quot;
+[1] &quot;La moda de TAM es: 4&quot;
+[1] &quot;La moda de TAD es: 4&quot;
+[1] &quot;La moda de FR_RESPIRAT es: 4&quot;
+[1] &quot;La moda de FR_P es: 4&quot;
+[1] &quot;La moda de FR_E es: 4&quot;
+[1] &quot;La moda de ET_CO2 es: 4&quot;
+[1] &quot;La moda de PTC_CO2 es: 7&quot;
+[1] &quot;La moda de INS_CO2 es: 4&quot;
+[1] &quot;La moda de PIP es: 4&quot;
+[1] &quot;La moda de PMVR es: 4&quot;
+[1] &quot;La moda de VTE es: 4&quot;
+[1] &quot;La moda de PS_VOL es: 4&quot;
+[1] &quot;La moda de COMPLIANZA es: 4&quot;
+[1] &quot;La moda de RESISTENCIA es: 4&quot;</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2F0KFwiXFxuXCIpXG5gYGAifQ== -->
+<pre class="r"><code>cat(&quot;\n&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJpbnQgKHBhc3RlKFwiWSBsYSBtb2RhIGRlIGxhcyBtb2RhcyBkZSBsYXMgc2VyaWVzIGVzOlwiLCBNb2RlKHgpKSlcbmBgYCJ9 -->
+<pre class="r"><code>print (paste(&quot;Y la moda de las modas de las series es:&quot;, Mode(x)))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiWSBsYSBtb2RhIGRlIGxhcyBtb2RhcyBkZSBsYXMgc2VyaWVzIGVzOiA0XCJcbiJ9 -->
+<pre><code>[1] &quot;Y la moda de las modas de las series es: 4&quot;</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucm0oYWEsYmIsY2MseClcbmBgYCJ9 -->
+<pre class="r"><code>rm(aa,bb,cc,x)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<ol start="3" style="list-style-type: decimal">
+<li>Interpolar los valores para que no haya NAs en las series</li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuRGF0b3NfdHNfaW50ZXJwb2xhZG9zIDwtIG5hLmFwcHJveChEYXRvc190cylcbkRhdG9zX3RzX2ludGVycG9sYWRvcyA8LSBuYS5vbWl0KERhdG9zX3RzX2ludGVycG9sYWRvcylcbiNQZW5kaWVudGUgcmV2aXNhciBzaSB0aWVuZSBzZW50aWRvIHF1ZSB0b2RvcyBsb3MgcGFyw6FtZXRyb3MgbGxldmVuIDEgZGVjaW1hbFxuRGF0b3NfdHNfaW50ZXJwb2xhZG9zIDwtIHJvdW5kKERhdG9zX3RzX2ludGVycG9sYWRvcywgZGlnaXRzID0gMSlcbmBgYCJ9 -->
+<pre class="r"><code>Datos_ts_interpolados &lt;- na.approx(Datos_ts)
+Datos_ts_interpolados &lt;- na.omit(Datos_ts_interpolados)
+#Pendiente revisar si tiene sentido que todos los parámetros lleven 1 decimal
+Datos_ts_interpolados &lt;- round(Datos_ts_interpolados, digits = 1)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuRGF0b3NfdHMgPC0gbWVyZ2UueHRzIChzZXJpZVtbMV1dLHNlcmllW1syXV0pXG5mb3IgKGkgaW4gMzpsZW5ndGgoc2VyaWUpKXtcbiAgICAgICAgRGF0b3NfdHMgPC0gbWVyZ2UueHRzKERhdG9zX3RzLHNlcmllW1tpXV0pXG59XG5ybSAoaSlcbmBgYCJ9 -->
@@ -1708,17 +1855,6 @@ for (i in 3:length(serie)){
         Datos_ts &lt;- merge.xts(Datos_ts,serie[[i]])
 }
 rm (i)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Si queremos los datos sin NA:</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuRGF0b3NfdHNfaW50ZXJwb2xhZG9zIDwtIG5hLmFwcHJveChEYXRvc190cylcbkRhdG9zX3RzX2ludGVycG9sYWRvcyA8LSBuYS5vbWl0KERhdG9zX3RzX2ludGVycG9sYWRvcylcbiNQZW5kaWVudGUgcmV2aXNhciBzaSB0aWVuZSBzZW50aWRvIHF1ZSB0b2RvcyBsb3MgcGFyw6FtZXRyb3MgbGxldmVuIDEgZGVjaW1hbFxuRGF0b3NfdHNfaW50ZXJwb2xhZG9zIDwtIHJvdW5kKERhdG9zX3RzX2ludGVycG9sYWRvcywgZGlnaXRzID0gMSlcbmBgYCJ9 -->
-<pre class="r"><code>Datos_ts_interpolados &lt;- na.approx(Datos_ts)
-Datos_ts_interpolados &lt;- na.omit(Datos_ts_interpolados)
-#Pendiente revisar si tiene sentido que todos los parámetros lleven 1 decimal
-Datos_ts_interpolados &lt;- round(Datos_ts_interpolados, digits = 1)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1744,7 +1880,7 @@ Datos_ts_interpolados &lt;- round(Datos_ts_interpolados, digits = 1)</code></pre
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIkludGVycG9sYWNpb24iDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpIQVkgUVVFIE5PUk1BTElaQVIgQURFTcOBUyBMT1MgVElNRSBTVEFNUFMgUEFSQSBFVklUQVIgTExFTkFSIEVMIERBVEFGUkFNRSBERSBOQXMNCg0KYGBge3J9DQpEYXRvc190cyA8LSBtZXJnZS54dHMgKHNlcmllW1sxXV0sc2VyaWVbWzJdXSkNCmZvciAoaSBpbiAzOmxlbmd0aChzZXJpZSkpew0KICAgICAgICBEYXRvc190cyA8LSBtZXJnZS54dHMoRGF0b3NfdHMsc2VyaWVbW2ldXSkNCn0NCnJtIChpKQ0KYGBgDQoNCg0KU2kgcXVlcmVtb3MgbG9zIGRhdG9zIHNpbiBOQToNCmBgYHtyfQ0KRGF0b3NfdHNfaW50ZXJwb2xhZG9zIDwtIG5hLmFwcHJveChEYXRvc190cykNCkRhdG9zX3RzX2ludGVycG9sYWRvcyA8LSBuYS5vbWl0KERhdG9zX3RzX2ludGVycG9sYWRvcykNCiNQZW5kaWVudGUgcmV2aXNhciBzaSB0aWVuZSBzZW50aWRvIHF1ZSB0b2RvcyBsb3MgcGFyw6FtZXRyb3MgbGxldmVuIDEgZGVjaW1hbA0KRGF0b3NfdHNfaW50ZXJwb2xhZG9zIDwtIHJvdW5kKERhdG9zX3RzX2ludGVycG9sYWRvcywgZGlnaXRzID0gMSkNCmBgYA0KDQpGdW5jaW9uIHBhcmEgY29udmVydGlyIHVuYSBjbGFzZSB6b28gZW4gdW4gZGF0YWZyYW1lDQpgYGB7cn0NCnpvb1RvRGYgPC0gZnVuY3Rpb24oeikgew0KICAgIGRmIDwtIGFzLmRhdGEuZnJhbWUoeikgDQogICAgZGYkRGF0ZSA8LSB0aW1lKHopICNjcmVhdGUgYSBEYXRlIGNvbHVtbg0KICAgIHJvd25hbWVzKGRmKSA8LSBOVUxMICNzbyByb3cgbmFtZXMgbm90IGZpbGxlZCB3aXRoIGRhdGVzDQogICAgZGYgPC0gZGZbLGMobmNvbChkZiksIDE6KG5jb2woZGYpLTEpKV0gI3Jlb3JkZXIgY29sdW1ucyBzbyBEYXRlIGZpcnN0DQogICAgcmV0dXJuKGRmKQ0KfQ0KYGBgDQoNClkgYXF1w60gdGVuZW1vcyBudWVzdHJvIGRhdGFmcmFtZQ0KYGBge3J9DQpEYXRvcyA8LSB6b29Ub0RmKERhdG9zX3RzKQ0KYGBgDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkludGVycG9sYWNpb24iDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KRW4gZXN0ZSBub3RlYm9vayByZWFsaXphIGxhcyBzaWd1aWVudGVzIGZ1bmNpb25lcw0KMSkgU2VsZWNjaW9uYXIgZWwgdGltZXN0YW1wIGluaWNpYWwgY29tw7puIHBhcmEgdG9kYXMgbGFzIHNlcmllcw0KMikgU2VsZWNjaW9uYXIgZWwgbGFwc28gdGVtcG9yYWwgZW50cmUgdmFsb3JlcyBjb23Dum4gcGFyYSB0b2RhcyBsYXMgc2VyaWVzDQozKSBJbnRlcnBvbGFyIGxvcyB2YWxvcmVzIHBhcmEgcXVlIG5vIGhheWEgTkFzIGVuIGxhcyBzZXJpZXMNCg0KMSkgU2VsZWNjaW9uYXIgZWwgdGltZXN0YW1wIGluaWNpYWwgY29tw7puIHBhcmEgdG9kYXMgbGFzIHNlcmllcw0KYGBge3J9DQojRW1wZXphbW9zIHBvciB2ZXIgZWwgdGltZXN0YW1wIGluaWNpYWwgcGFyYSBjYWRhIHNlcmllDQpsYXBwbHkoc2VyaWUsZmlyc3QpDQoNCiNBUVVJIERFQkVSSUFNT1MgQUhPUkEgREVDSURJUiBDT01PIENBTENVTEFSIEVMIFRJTUVTVEFNUCBJTklDSUFMDQoNCg0KYGBgDQoNCjIpIFNlbGVjY2lvbmFyIGVsIGxhcHNvIHRlbXBvcmFsIGVudHJlIHZhbG9yZXMgY29tw7puIHBhcmEgdG9kYXMgbGFzIHNlcmllcw0KYGBge3J9DQojQ3JlYW1vcyB1bmEgZnVuY2nDs24gcGFyYSBjYWxjdWxhciBsYSBtb2RhDQpNb2RlIDwtIGZ1bmN0aW9uKHgpIHsNCiAgdXggPC0gdW5pcXVlKHgpDQogIHV4W3doaWNoLm1heCh0YWJ1bGF0ZShtYXRjaCh4LCB1eCkpKV0NCn0NCg0KI0NvbXByb2JhbW9zIGFob3JhIGFsIGxhcHNvIHRlbXBvcmFsIGVudHJlIHZhbG9yZXMgcGFyYSBjYWRhIHNlcmllIHkgc3UgbW9kYQ0KYWEgPC0gbGFwcGx5KHNlcmllLC5pbmRleCkgI2V4dHJhZSBsb3MgdGltZXN0YW1wcyBkZSBsYXMgc2VyaWVzDQpiYiA8LSBsYXBwbHkoYWEsZGlmZikgI2NhbHVsYSBlbCBsYXBzbyB0ZW1wb3JhbA0KY2MgPC0gbGFwcGx5KGJiLE1vZGUpICNjYWxjdWxhIGxhIG1vZGEgZGUgY2FkYSBzZXJpZQ0KeCA8LSAwDQpmb3IgKGkgaW4gMTpsZW5ndGgoY2MpKXsNCiAgICAgICAgeFtpXSA8LSBjY1tbaV1dDQogICAgICAgIHByaW50IChwYXN0ZSgiTGEgbW9kYSBkZSIsIG5hbWVzKHNlcmllW1tpXV0pLCAiZXM6Iix4W2ldKSkNCn0NCmNhdCgiXG4iKQ0KcHJpbnQgKHBhc3RlKCJZIGxhIG1vZGEgZGUgbGFzIG1vZGFzIGRlIGxhcyBzZXJpZXMgZXM6IiwgTW9kZSh4KSkpDQpybShhYSxiYixjYyx4KQ0KYGBgDQoNCg0KDQozKSBJbnRlcnBvbGFyIGxvcyB2YWxvcmVzIHBhcmEgcXVlIG5vIGhheWEgTkFzIGVuIGxhcyBzZXJpZXMNCmBgYHtyfQ0KRGF0b3NfdHNfaW50ZXJwb2xhZG9zIDwtIG5hLmFwcHJveChEYXRvc190cykNCkRhdG9zX3RzX2ludGVycG9sYWRvcyA8LSBuYS5vbWl0KERhdG9zX3RzX2ludGVycG9sYWRvcykNCiNQZW5kaWVudGUgcmV2aXNhciBzaSB0aWVuZSBzZW50aWRvIHF1ZSB0b2RvcyBsb3MgcGFyw6FtZXRyb3MgbGxldmVuIDEgZGVjaW1hbA0KRGF0b3NfdHNfaW50ZXJwb2xhZG9zIDwtIHJvdW5kKERhdG9zX3RzX2ludGVycG9sYWRvcywgZGlnaXRzID0gMSkNCmBgYA0KDQoNCmBgYHtyfQ0KRGF0b3NfdHMgPC0gbWVyZ2UueHRzIChzZXJpZVtbMV1dLHNlcmllW1syXV0pDQpmb3IgKGkgaW4gMzpsZW5ndGgoc2VyaWUpKXsNCiAgICAgICAgRGF0b3NfdHMgPC0gbWVyZ2UueHRzKERhdG9zX3RzLHNlcmllW1tpXV0pDQp9DQpybSAoaSkNCmBgYA0KDQoNCkZ1bmNpb24gcGFyYSBjb252ZXJ0aXIgdW5hIGNsYXNlIHpvbyBlbiB1biBkYXRhZnJhbWUNCmBgYHtyfQ0Kem9vVG9EZiA8LSBmdW5jdGlvbih6KSB7DQogICAgZGYgPC0gYXMuZGF0YS5mcmFtZSh6KSANCiAgICBkZiREYXRlIDwtIHRpbWUoeikgI2NyZWF0ZSBhIERhdGUgY29sdW1uDQogICAgcm93bmFtZXMoZGYpIDwtIE5VTEwgI3NvIHJvdyBuYW1lcyBub3QgZmlsbGVkIHdpdGggZGF0ZXMNCiAgICBkZiA8LSBkZlssYyhuY29sKGRmKSwgMToobmNvbChkZiktMSkpXSAjcmVvcmRlciBjb2x1bW5zIHNvIERhdGUgZmlyc3QNCiAgICByZXR1cm4oZGYpDQp9DQpgYGANCg0KWSBhcXXDrSB0ZW5lbW9zIG51ZXN0cm8gZGF0YWZyYW1lDQpgYGB7cn0NCkRhdG9zIDwtIHpvb1RvRGYoRGF0b3NfdHMpDQpgYGANCg==</div>
 
 
 

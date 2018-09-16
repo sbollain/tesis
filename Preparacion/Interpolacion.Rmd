@@ -2,8 +2,53 @@
 title: "Interpolacion"
 output: html_notebook
 ---
+En este notebook realiza las siguientes funciones
+1) Seleccionar el timestamp inicial común para todas las series
+2) Seleccionar el lapso temporal entre valores común para todas las series
+3) Interpolar los valores para que no haya NAs en las series
 
-HAY QUE NORMALIZAR ADEMÁS LOS TIME STAMPS PARA EVITAR LLENAR EL DATAFRAME DE NAs
+1) Seleccionar el timestamp inicial común para todas las series
+```{r}
+#Empezamos por ver el timestamp inicial para cada serie
+lapply(serie,first)
+
+#AQUI DEBERIAMOS AHORA DECIDIR COMO CALCULAR EL TIMESTAMP INICIAL
+
+
+```
+
+2) Seleccionar el lapso temporal entre valores común para todas las series
+```{r}
+#Creamos una función para calcular la moda
+Mode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+#Comprobamos ahora al lapso temporal entre valores para cada serie y su moda
+aa <- lapply(serie,.index) #extrae los timestamps de las series
+bb <- lapply(aa,diff) #calula el lapso temporal
+cc <- lapply(bb,Mode) #calcula la moda de cada serie
+x <- 0
+for (i in 1:length(cc)){
+        x[i] <- cc[[i]]
+        print (paste("La moda de", names(serie[[i]]), "es:",x[i]))
+}
+cat("\n")
+print (paste("Y la moda de las modas de las series es:", Mode(x)))
+rm(aa,bb,cc,x)
+```
+
+
+
+3) Interpolar los valores para que no haya NAs en las series
+```{r}
+Datos_ts_interpolados <- na.approx(Datos_ts)
+Datos_ts_interpolados <- na.omit(Datos_ts_interpolados)
+#Pendiente revisar si tiene sentido que todos los parámetros lleven 1 decimal
+Datos_ts_interpolados <- round(Datos_ts_interpolados, digits = 1)
+```
+
 
 ```{r}
 Datos_ts <- merge.xts (serie[[1]],serie[[2]])
@@ -13,14 +58,6 @@ for (i in 3:length(serie)){
 rm (i)
 ```
 
-
-Si queremos los datos sin NA:
-```{r}
-Datos_ts_interpolados <- na.approx(Datos_ts)
-Datos_ts_interpolados <- na.omit(Datos_ts_interpolados)
-#Pendiente revisar si tiene sentido que todos los parámetros lleven 1 decimal
-Datos_ts_interpolados <- round(Datos_ts_interpolados, digits = 1)
-```
 
 Funcion para convertir una clase zoo en un dataframe
 ```{r}
