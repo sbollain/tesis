@@ -1,0 +1,154 @@
+---
+title: "Interpolacion: creación de series temporales regulares (equidistantes)"
+output: html_notebook
+---
+En este notebook realiza las siguientes funciones
+1) Visualizamos el timestamp inicial y la periodicidad de cada serie
+2) Seleccionar el timestamp inicial común para todas las series y el lapso entre valores para cada serie
+3) Interpolar los valores para que todos los lapsos temporales sean iguales
+4) Crear series temporales "ts" para cada parámetro
+
+ENTRADA:
+Las salidas de los notebook "Descarga.Rmd" y "creacioneDeEstructuras"
+
+SALIDA: 
+"serie_i": lista de series temporales "xts" con los datos interpolados equidistantes 
+"serie_ts": lista de series temporales "ts" con los datos interpolados equidistantes
+
+1) Visualizamos el timestamp inicial y la periodicidad de cada serie
+
+```{r}
+require(xts)
+```
+
+
+```{r}
+#Empezamos por ver el timestamp inicial para cada serie y su periodicidad
+#lapply(serie,first)
+for (i in 1:length(serie)){
+        print (paste("La periodicidad e intervalo de", names(serie[i]) ,"son:"))
+        print (periodicity(serie[[i]]))
+}
+rm (i)
+```
+
+```{r}
+#Comprobamos ahora al lapso temporal entre valores para cada serie 
+tiempos <- lapply(serie,.index) #extrae los timestamps de las series
+lapsos <- lapply(tiempos,diff) #calula el lapso temporal entre valores
+
+for (i in 1:length(lapsos)){
+        print (paste("Los lapsos iniciales de", names(serie[i]), "son:"))
+        print (head(lapsos[[i]]))
+}
+rm (i,tiempos,lapsos)
+```
+
+
+2) Seleccionar el timestamp inicial común para todas las series y el lapso entre valores para cada serie
+```{r}
+#En este caso parece razonable empezar a las 17:50:01 del 2015-02-03
+#Pues aunque los datos empiezan a las 17:45 en los siguientes 5 minutos no hay datos
+#Como se puede comprobar con los análisis de las modas que se hacen más adelante y que
+# generaría un WARNING sino cambiamos el inicio
+serie_i <- serie
+for (i in 1:length(serie_i)){
+        serie_i[[i]] <- serie[[i]]["2015-02-03 17:50:00 CET/"]
+        tzone(serie_i[[i]]) <- "Europe/Berlin"
+}
+rm (i)
+```
+
+Comprobamos si hay algún intervalo sin valores mayor que 3 veces la moda
+```{r}
+#Creamos una función para calcular la moda
+Mode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+#Comprobamos si el lapso temporal entre valores es mayor que tres veces la moda
+tiempos <- lapply(serie_i,.index) #extrae los timestamps de las series
+lapsos <- lapply(tiempos,diff) #calula el lapso temporal entre valores
+modas <- lapply(lapsos,Mode) #calcula la moda de cada serie
+
+for (i in 1:length(modas)){
+        print (paste("La moda de", names(serie_i[i]), "es:",modas[i]))
+        #Ahora comprobamos si hay algún intervalo mayor 3 veces la moda
+        maximo <- lapply(lapsos[i],max)
+        if (maximo > 3*modas[[i]] ){
+                print (paste("WARNING: Hay huecos demasiado grandes en la serie:", maximo ))
+        }
+}
+rm(i,tiempos,lapsos,maximo)
+```
+
+3) Interpolar los valores para que todos los lapsos temporales sean iguales
+
+```{r}
+
+for (i in 1:length(serie_i)){
+        #Creamos un índice de tiempos equidistantes
+        indice <- seq(min(index(serie_i[[i]])),max(index(serie_i[[i]])), by = as.difftime(modas[[i]],units='secs'))
+        #Unimos esa serie equidistante recién creado con nuestra serie e interpolamos
+        b <- merge(serie_i[[i]],indice,fill=na.approx) 
+        dimnames(b) <- NULL
+        #Ahora nos quedamos solo con la serie regular
+        b <- b[indice]
+        #Y finalmente eliminamos los decimales
+        serie_i[[i]] <- round(b)
+        tzone(serie_i[[i]]) <- "Europe/Berlin"
+}
+
+
+rm(modas,i,indice,b)
+```
+
+4) Crear series temporales "ts" para cada parámetro
+
+```{r}
+require(stats)
+for (i in 1:length(serie_i)){
+serie_ts[[i]] <- as.ts(serie_i[[1]])
+}
+rm(i)
+```
+
+
+
+
+
+
+BACKUP
+```{r}
+Datos_ts_interpolados <- na.approx(Datos_ts)
+Datos_ts_interpolados <- na.omit(Datos_ts_interpolados)
+#Pendiente revisar si tiene sentido que todos los parámetros lleven 1 decimal
+Datos_ts_interpolados <- round(Datos_ts_interpolados, digits = 1)
+```
+
+
+```{r}
+Datos_ts <- merge.xts (serie[[1]],serie[[2]])
+for (i in 3:length(serie)){
+        Datos_ts <- merge.xts(Datos_ts,serie[[i]])
+}
+rm (i)
+```
+
+
+Funcion para convertir una clase zoo en un dataframe
+```{r}
+zooToDf <- function(z) {
+    df <- as.data.frame(z) 
+    df$Date <- time(z) #create a Date column
+    rownames(df) <- NULL #so row names not filled with dates
+    df <- df[,c(ncol(df), 1:(ncol(df)-1))] #reorder columns so Date first
+    return(df)
+}
+```
+
+Y aquí tenemos nuestro dataframe
+```{r}
+Datos <- zooToDf(Datos_ts)
+```

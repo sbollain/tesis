@@ -2,7 +2,7 @@ El objetivo de este proyecto es poder hacer un análisis estadístico de los dat
 
 En concreto, queremos explorar:
 
-1) Modelos predictivos de valores futuros a partir de la creación de "Time Series" para los valores médicos monitorizados (library: zoo)
+1) Modelos predictivos de valores futuros a partir de la creación de "Time Series" para los valores médicos monitorizados (library: zoo,xts)
 
 2) Estudio de correlaciones e inferencias entre los distintos valores a partir de un "data frame" a construir, donde cada línea corresponda a una observación en un momento dado, y cada columna, a los distintos valores monitorizados por la aplicación. Análisis de distribución para cada valor
 

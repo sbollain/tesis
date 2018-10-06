@@ -6,7 +6,7 @@
 
 # Para poder utilizar los paquetes instalados:
 # library and require cargan los paquetes requeridos
-# detach lo descarga
+# detach los descarga
 
 # Al vector "misPaquetes" se deben añadir todos los paquetes requeridos
 # Paquetes básicos

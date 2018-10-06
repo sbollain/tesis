@@ -4,6 +4,22 @@ output:
   html_document:
     df_print: paged
 ---
+
+ENTRADA: 
+"tabla": Nombre de la tabla postgres de donde estamos leyendo
+"paciente_id": Número de paciente del que estamos leyendo datos
+"fecha_inicio": Fecha desde la que vamos a leer valores
+"fecha_fin": Fecha hasta la que vamos a leer valores
+"etiquetas": Leído desde el .Rprofile contiene los nombres de los parámetros
+
+SALIDA: 
+"tabla": Nombre de la tabla postgres de donde estamos leyendo
+"paciente_id": Número de paciente del que estamos leyendo datos
+"fecha_inicio": Fecha desde la que vamos a leer valores
+"fecha_fin": Fecha hasta la que vamos a leer valores
+"etiquetas": Leído desde el .Rprofile contiene los nombres de los parámetros
+"mydata": dataframe con todos los valores leídos
+
 Primero tenemos que realizar la conexión a la BBDD PostgreSQSL 
 ```{r}
 psswd <- .rs.askForPassword("Introduzca la contraseña de la BBDD")

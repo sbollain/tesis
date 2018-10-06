@@ -1,11 +1,15 @@
 ---
-title: "CreacionDeEstructuras"
+title: "Notebook para la creación de las series temporales por parámetro"
 output:
   html_document:
     df_print: paged
 ---
 
-Vamos a crear series temporales para cada parámetro y finalmente un dataframe con la estructura adecuada, una línea por cada observación
+ENTRADA:
+Las salidas del notebook "Descarga.Rmd"
+
+SALIDA:
+"serie": lista de series temporales xts por cada parámetro
 
 Las librerías que nos permite trabajar con series temporales con intervalos variables entre valores son "zoo" y"xts". "rlist" nos permite trabajar con funciones avanzadas sobre las listas
 ```{r}
@@ -33,19 +37,19 @@ for (i in 1:length(etiquetas)){
                 serie_d <- data.frame(serie_d$fecha,serie_d$valor)
                 colnames(serie_d) <- c("fecha","valor")
                 # Creamos la serie temporal para cada parámetro
-                #serie_t <- assign (etiquetas[i], xts(serie_d$valor,round(serie_d$fecha,"secs")))
                 assign ("serie_t", xts(serie_d$valor,round(serie_d$fecha,"secs")))
+                tzone(serie_t) <- "Europe/Berlin"
                 #Creamos una lista que contiene todas las series temporales que tienen datos
                 if (j==1){
                         serie <- list(serie_t)
                 } else {
                         serie <- list.append(serie,serie_t)
                 }
-                names(serie[[j]]) <- etiquetas[i]
+                names(serie)[j] <- etiquetas[i]
                 print(paste("Hay", cantidad ,"valores de", etiquetas[i], "entre", serie_d$fecha[1], "y", serie_d$fecha[cantidad]))
         }
 }
-rm (i,j,maximo,serie_d,serie_t)
+rm (i,j,maximo,serie_d,serie_t,cantidad)
 ```
 
 

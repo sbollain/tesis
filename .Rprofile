@@ -20,6 +20,8 @@
 # (This would need the fortunes package to be installed.)
 #  if (interactive()) 
 #    fortunes::fortune()
+  
+  Sys.setenv(TZ = "Europe/Berlin")
 
   etiquetas=c("FR_PULSO","FCECG","FCTA","SAT_O2","TAS","TAM","TAD","PVC","PIC","FR_RESPIRAT",
               "FR_P","FR_E","ET_CO2","PTC_CO2","INS_CO2","PG_CO2","TEMP1","TEMP2","I_PERFUSION","PIP_P",
