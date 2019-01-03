@@ -108,8 +108,9 @@ rm(modas,i,indice,b)
 
 ```{r}
 require(stats)
+serie_ts <- serie_i
 for (i in 1:length(serie_i)){
-serie_ts[[i]] <- as.ts(serie_i[[1]])
+        serie_ts[[i]] <- as.ts(serie_i[[i]])
 }
 rm(i)
 ```
