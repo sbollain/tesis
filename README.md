@@ -6,7 +6,7 @@ Estos son los pasos principales:
 
 1) Instalación paquetes utilizados en el proyecto (directorio Entorno)
 Se hace desde el fichero InstalacionPaquetes.R que se encuentra en el directorio Entorno
-Sólo hace falta ejecutarlo la primera cez que se use el RStudio
+Sólo hace falta ejecutarlo la primera vez que se use el RStudio
 
 2) Descarga de datos desde la BBDD (directorio PostgreSQL)
 Contiene el notebook Descarga.Rmd que:
@@ -18,5 +18,13 @@ Contiene los siguientes notebooks:
 CreacionEstructuras.Rmd:en este notebook, se crean una lista que contiene los time series por cada parámetro 
 
 4) Preparación de los datos (directorio Preparacion)
+Corresponde esta etapa a la de "Preparación de los datos" dentro de la metodología CRISP-DM.
 Contiene los siguientes notebooks:
 Interpolacion.Rmd: aquí se interpolan los valores para conseguie series temporales con valores equidistantes en el tiempo, y además, los timestamp se hacen comunes para todas las series de modo que facilitamos el análisis
+
+5) Visualización de los datos (directorio Visualizacion)
+Corresponde esta etapa a la de "Comprensión de los datos" dentro de la metodología CRISP-DM.Aquí está detrás de la etapa de preparación, porque también vamos a representar las series interpoladas
+Contiene los siguientes notebooks:
+VisualizacionPorTiempo.Rmd: Se representan los valores en el tiempo
+VisualizacionPorFrecuencia.Rmd:Se representan las frecuencias
+
