@@ -1,0 +1,58 @@
+---
+title: "Visualizacion"
+output: html_notebook
+---
+ENTRADA:
+"mydata": dataframe de los valores leídos de la BBDD
+"serie": lista de series temporales "xts" originales 
+"serie_ts": lista de series temporales "ts" con los datos interpolados equidistantes
+
+SALIDA: 
+Los gráficos que seleccionemos
+
+PAQUETES:
+Comprobamos que están cargadas las librerías requeridas
+```{r}
+require(dygraphs)
+require(xts)
+```
+
+ 
+Empecemos por ver la lista de parámetros de los que disponemos
+```{r}
+for (i in 1:length(serie)){
+        print(paste(i , names(serie[i])))
+}
+rm (i) 
+
+```
+
+Representación de un parámetro
+```{r}
+# Elegir el número del parámtero que queremos representar
+parametro1 <- 1
+#plot(serie[[parametro1]],main = names(serie[parametro1]))
+#autoplot(serie[[parametro1]],main = names(serie[parametro1]))
+dygraph (serie[[parametro1]],main= "Medlinetec")  %>% 
+        dySeries(label = names(serie[parametro1])) %>% 
+        dyRangeSelector()
+```
+
+Representación de dos parámetros simultáneos
+```{r}
+# Elegir el número de los dos parámetros que queremos representar de forma conjunta
+parametro1 <- 4
+parametro2 <- 6
+series_parametros <- cbind(serie[[parametro1]],serie[[parametro2]])
+#plot(serie[[parametro]],main = names(serie[parametro]))
+dygraph (series_parametros,main= "Medlinetec")  %>% 
+        dySeries("serie..parametro1..",label = names(serie[parametro1])) %>% 
+#        dyAxis("y", label = "", valueRange = c(min(serie[[parametro1]]), max(serie[[parametro1]]))) %>%
+        dySeries("serie..parametro2..",label = names(serie[parametro2])) %>%
+#        dyAxis("y2", label = "", valueRange = c(min(serie[[parametro2]]), max(serie[[parametro2]]))) %>%
+        dyRangeSelector()
+rm(series_parametros)
+```
+
+
+

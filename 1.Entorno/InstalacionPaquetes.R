@@ -10,7 +10,9 @@
 
 # Al vector "misPaquetes" se deben añadir todos los paquetes requeridos
 # Paquetes básicos
-misPaquetes <- c("Rcmdr","ggplot2","rlist")
+misPaquetes <- c("Rcmdr","rlist")
+#Añadimos paquetes para visualizaciones
+misPaquetes <- c(misPaquetes,"ggplot2","dygraphs")
 # Añadimos el paquete "RPostgreSQL" para la conexión a la BBDD
 misPaquetes <- c(misPaquetes,"RPostgreSQL")
 # Añadimos los paquetes "zoo" y "xts" para gestión de series temporales
@@ -19,7 +21,8 @@ misPaquetes <- c(misPaquetes,"zoo","xts")
 misPaquetes <- c(misPaquetes,"forecast")
 # Añadimos los paquetes para gestión detección de puntos de cambio
 misPaquetes <- c(misPaquetes,"changepoint","changepoint.np","ecp","cpm","strucchange","bcp")
-
+# Añadimos el paquete "installr" para poder actualizar R con el comando updateR()
+misPaquetes <- c(misPaquetes,"installr")
 
 # Bucle para la instalación de los paquetes
 for(paquete in misPaquetes){

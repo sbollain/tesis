@@ -15,13 +15,14 @@ SALIDA:
 "serie_i": lista de series temporales "xts" con los datos interpolados equidistantes 
 "serie_ts": lista de series temporales "ts" con los datos interpolados equidistantes
 
-1) Visualizamos el timestamp inicial y la periodicidad de cada serie
-
+PAQUETES:
+Comprobamos que están cargadas las librerías requeridas
 ```{r}
 require(xts)
+require(stats)
 ```
 
-
+1) Visualizamos el timestamp inicial y la periodicidad de cada serie
 ```{r}
 #Empezamos por ver el timestamp inicial para cada serie y su periodicidad
 #lapply(serie,first)
@@ -86,7 +87,6 @@ rm(i,tiempos,lapsos,maximo)
 3) Interpolar los valores para que todos los lapsos temporales sean iguales
 
 ```{r}
-
 for (i in 1:length(serie_i)){
         #Creamos un índice de tiempos equidistantes
         indice <- seq(min(index(serie_i[[i]])),max(index(serie_i[[i]])), by = as.difftime(modas[[i]],units='secs'))
@@ -99,15 +99,12 @@ for (i in 1:length(serie_i)){
         serie_i[[i]] <- round(b)
         tzone(serie_i[[i]]) <- "Europe/Berlin"
 }
-
-
 rm(modas,i,indice,b)
 ```
 
 4) Crear series temporales "ts" para cada parámetro
 
 ```{r}
-require(stats)
 serie_ts <- serie_i
 for (i in 1:length(serie_i)){
         serie_ts[[i]] <- as.ts(serie_i[[i]])
@@ -117,26 +114,7 @@ rm(i)
 
 
 
-
-
-
 BACKUP
-```{r}
-Datos_ts_interpolados <- na.approx(Datos_ts)
-Datos_ts_interpolados <- na.omit(Datos_ts_interpolados)
-#Pendiente revisar si tiene sentido que todos los parámetros lleven 1 decimal
-Datos_ts_interpolados <- round(Datos_ts_interpolados, digits = 1)
-```
-
-
-```{r}
-Datos_ts <- merge.xts (serie[[1]],serie[[2]])
-for (i in 3:length(serie)){
-        Datos_ts <- merge.xts(Datos_ts,serie[[i]])
-}
-rm (i)
-```
-
 
 Funcion para convertir una clase zoo en un dataframe
 ```{r}
@@ -149,7 +127,3 @@ zooToDf <- function(z) {
 }
 ```
 
-Y aquí tenemos nuestro dataframe
-```{r}
-Datos <- zooToDf(Datos_ts)
-```

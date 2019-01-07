@@ -20,13 +20,19 @@ SALIDA:
 "etiquetas": Leído desde el .Rprofile contiene los nombres de los parámetros
 "mydata": dataframe con todos los valores leídos
 
+PAQUETES:
+Comprobamos que están cargadas las librerías requeridas
+```{r}
+require("RPostgreSQL")
+```
+
 Primero tenemos que realizar la conexión a la BBDD PostgreSQSL 
 ```{r}
 psswd <- .rs.askForPassword("Introduzca la contraseña de la BBDD")
 ```
 
 ```{r}
-library("RPostgreSQL")
+
 drv <- dbDriver("PostgreSQL")
 con <- dbConnect(drv,dbname="prueba",host="localhost",port=5432,user="medlinetec",password=psswd)
 ```

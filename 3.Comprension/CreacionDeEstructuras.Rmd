@@ -11,10 +11,11 @@ Las salidas del notebook "Descarga.Rmd"
 SALIDA:
 "serie": lista de series temporales xts por cada parámetro
 
+PAQUETES:
 Las librerías que nos permite trabajar con series temporales con intervalos variables entre valores son "zoo" y"xts". "rlist" nos permite trabajar con funciones avanzadas sobre las listas
 ```{r}
-library(xts)
-library(rlist)
+require(xts)
+require(rlist)
 ```
 
 Como sugerencia, usar el comando summary
